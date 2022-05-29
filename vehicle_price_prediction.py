@@ -49,3 +49,35 @@ final_dataset.head()
 final_dataset['Fuel_Type'] = label_encoder.fit_transform(final_dataset['Fuel_Type'])
 final_dataset['Seller_Type'] = label_encoder.fit_transform(final_dataset['Seller_Type'])
 final_dataset['Transmission'] = label_encoder.fit_transform(final_dataset['Transmission'])
+
+
+
+
+final_dataset['Fuel_Type']= label_encoder.fit_transform(final_dataset['Fuel_Type'])
+  
+final_dataset['Fuel_Type'].unique()
+
+final_dataset.corr()
+
+corrmat=final_dataset.corr()
+top_corr_features=corrmat.index
+plt.figure(figsize=(20,20))
+g=sns.heatmap(final_dataset[top_corr_features].corr(),annot=True,cmap="RdYlGn")
+
+y=final_dataset['Selling_Price']
+y.head()
+X=final_dataset.drop(['Selling_Price'],axis=1)
+X.head()
+
+scaler=StandardScaler()
+X=scaler.fit_transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=2)
+
+random_forest_regressor=RandomForestRegressor()
+random_forest_regressor.fit(X_train,y_train)
+
+train_acc=random_forest_regressor.score(X_train,y_train)
+test_acc=random_forest_regressor.score(X_test,y_test)
+print('Training Accuracy: ',round(train_acc*100, 2),'%')
+print('Testing Accuracy: ',round(test_acc*100, 2),'%')
